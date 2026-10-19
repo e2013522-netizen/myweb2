@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鄰里好康站 - 您的居家生活好幫手</title>
+    <!-- 引入 Google Fonts: Noto Sans TC 提供優質的中文字體顯示 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind 設定 -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // 啟用 class-based 深色模式
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            orange: '#F97316', // 溫暖橘
+                            green: '#10B981',  // 安心綠
+                            lightbg: '#FFF7ED', // 淺色背景 (橘色調)
+                            darkbg: '#1E293B',  // 深色背景
+                            cardlight: '#FFFFFF',
+                            carddark: '#334155',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 自訂樣式：平滑過渡效果與隱藏滾動條 */
+        body {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .form-input {
+            transition: all 0.2s;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #F97316;
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+        }
+        /* 給長輩舒適的行距 */
+        p {
+            line-height: 1.7;
+        }
+    </style>
+</head>
+<body class="bg-brand-lightbg text-gray-800 dark:bg-brand-darkbg dark:text-gray-100 font-sans antialiased">
+
+    <!-- 隱藏的背景音樂播放器 -->
+    <audio id="bg-music" loop>
+        <source src="https://img.ai365.fans/artworks/43d1e4df-2a76-45e2-8595-ecabb039ba26/nob3gcivur.m4a" type="audio/mp4">
+        您的瀏覽器不支援音樂播放。
+    </audio>
+
+    <!-- 固定在頂部的導覽列 -->
+    <header class="fixed top-0 w-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-sm z-50 transition-colors duration-300">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <!-- 品牌 Logo 圖示 (溫馨小屋) -->
+                <svg class="w-8 h-8 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                <span class="text-2xl font-bold tracking-wider text-brand-orange">鄰里好康站</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <!-- 音樂開關按鈕 -->
+                <button id="music-toggle" class="p-2 rounded-full bg-orange-100 text-brand-orange dark:bg-gray-700 dark:text-orange-300 hover:scale-110 transition-transform" aria-label="切換音樂">
+                    <!-- 預設顯示靜音圖示 (因為瀏覽器通常禁止自動播放) -->
+                    <svg id="icon-music-off" class="w-7 h-7 block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" clip-rule="evenodd"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path></svg>
+                    <svg id="icon-music-on" class="w-7 h-7 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
+                </button>
+                <!-- 深淺色模式切換按鈕 -->
+                <button id="theme-toggle" class="p-2 rounded-full bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-yellow-400 hover:scale-110 transition-transform" aria-label="切換深淺色模式">
+                    <!-- 太陽圖示 (淺色模式時顯示，點擊切換深色) -->
+                    <svg id="icon-sun" class="w-7 h-7 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <!-- 月亮圖示 (深色模式時顯示，點擊切換淺色) -->
+                    <svg id="icon-moon" class="w-7 h-7 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 頁首主視覺區塊 (Hero Section) -->
+    <section class="pt-32 pb-16 px-4 md:pt-40 md:pb-24">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-brand-orange mb-6 leading-tight">
+                把日子過得舒服，<br class="md:hidden">把好物帶進家裡！
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-10 font-medium">
+                朋友真心推薦的居家實用品，<br class="md:hidden">省錢、好用、不踩雷。
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4 px-4">
+                <a href="https://line.me/ti/p/~e0e016888" target="_blank" class="flex items-center justify-center gap-2 bg-brand-green hover:bg-emerald-600 text-white text-xl font-bold py-4 px-8 rounded-full shadow-lg transform transition hover:-translate-y-1">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 4.269 8.846 10.036 9.608.391.084.922.258 1.057.592.122.303.079.778.039 1.085l-.171 1.027c-.053.303-.242 1.186 1.039.647 1.281-.54 6.911-4.069 9.428-6.967 1.739-1.907 2.572-4.043 2.572-5.992zm-15.278 3.541h-2.917c-.366 0-.662-.296-.662-.662v-5.745c0-.366.296-.662.662-.662.366 0 .662.296.662.662v5.083h2.255c.366 0 .662.296.662.662 0 .366-.296.662-.662.662zm2.846 0h-1.325c-.366 0-.662-.296-.662-.662v-5.745c0-.366.296-.662.662-.662h1.325c.366 0 .662.296.662.662v5.745c0 .366-.296.662-.662.662zm4.12 0h-1.325c-.366 0-.662-.296-.662-.662v-3.327l-1.933 2.766c-.035.051-.082.091-.137.118-.057.028-.118.042-.181.042-.178 0-.343-.071-.466-.195-.122-.124-.194-.291-.194-.467v-5.745c0-.366.296-.662.662-.662h1.325c.366 0 .662.296.662.662v3.327l1.933-2.766c.035-.051.082-.091.137-.118.057-.028.118-.042.181-.042.178 0 .343.071.466.195.122.124.194.291.194.467v5.745c0 .366-.296.662-.662.662z"/></svg>
+                    加入 LINE 領優惠
+                </a>
+                <a href="#order" class="flex items-center justify-center gap-2 bg-brand-orange hover:bg-orange-600 text-white text-xl font-bold py-4 px-8 rounded-full shadow-lg transform transition hover:-translate-y-1">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    前往蝦皮賣場
+                </a>
+            </div>
+            <p class="mt-4 text-gray-500 dark:text-gray-400">LINE ID: <span class="font-bold select-all">e0e016888</span></p>
+        </div>
+    </section>
+
+    <!-- 信任區塊 (Trust Section) -->
+    <section class="py-16 bg-white dark:bg-brand-carddark">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800 dark:text-white border-b-4 border-brand-orange pb-4 inline-block mx-auto flex justify-center">不是好東西，我們不推薦！</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-lg md:text-xl">
+                <!-- 項目 1 -->
+                <div class="flex items-start gap-4 p-6 bg-brand-lightbg dark:bg-gray-800 rounded-2xl shadow-sm">
+                    <div class="bg-red-100 p-3 rounded-full text-red-500 shrink-0">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl mb-2 text-gray-900 dark:text-white">親自實測才推薦</h3>
+                        <p class="text-gray-600 dark:text-gray-300">每樣生活用品都是我們自己在家天天用、真心覺得好才分享。</p>
+                    </div>
+                </div>
+                <!-- 項目 2 -->
+                <div class="flex items-start gap-4 p-6 bg-brand-lightbg dark:bg-gray-800 rounded-2xl shadow-sm">
+                    <div class="bg-green-100 p-3 rounded-full text-green-600 shrink-0">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl mb-2 text-gray-900 dark:text-white">品質把關不踩雷</h3>
+                        <p class="text-gray-600 dark:text-gray-300">幫大家先過濾掉劣質品，買得安心、用得放心。</p>
+                    </div>
+                </div>
+                <!-- 項目 3 -->
+                <div class="flex items-start gap-4 p-6 bg-brand-lightbg dark:bg-gray-800 rounded-2xl shadow-sm">
+                    <div class="bg-yellow-100 p-3 rounded-full text-yellow-600 shrink-0">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl mb-2 text-gray-900 dark:text-white">價格實在無負擔</h3>
+                        <p class="text-gray-600 dark:text-gray-300">好友團購優惠價，省去中間剝削，把實惠留給自家人。</p>
+                    </div>
+                </div>
+                <!-- 項目 4 -->
+                <div class="flex items-start gap-4 p-6 bg-brand-lightbg dark:bg-gray-800 rounded-2xl shadow-sm">
+                    <div class="bg-blue-100 p-3 rounded-full text-blue-500 shrink-0">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl mb-2 text-gray-900 dark:text-white">人情味售後服務</h3>
+                        <p class="text-gray-600 dark:text-gray-300">收到有任何問題，隨時在 LINE 群敲我們，馬上為您處理。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 商品分類 (Products Category) -->
+    <section class="py-16 px-4">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800 dark:text-white">讓家事變輕鬆的實用推薦</h2>
+            
+            <div class="space-y-6">
+                <!-- 類別 1 -->
+                <div class="bg-white dark:bg-brand-carddark p-6 md:p-8 rounded-3xl shadow-md border-l-8 border-brand-orange">
+                    <h3 class="text-2xl font-bold text-brand-orange mb-4 flex items-center gap-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                        廚房省力必備
+                    </h3>
+                    <ul class="list-disc list-inside text-xl text-gray-700 dark:text-gray-300 space-y-3 marker:text-brand-orange">
+                        <li>耐用不沾鍋具，煎魚炒菜不黏鍋。</li>
+                        <li>好洗天然清潔用品，保護媽媽的雙手。</li>
+                        <li>料理小幫手工具，煮飯收拾不再腰酸背痛。</li>
+                    </ul>
+                </div>
+
+                <!-- 類別 2 -->
+                <div class="bg-white dark:bg-brand-carddark p-6 md:p-8 rounded-3xl shadow-md border-l-8 border-brand-green">
+                    <h3 class="text-2xl font-bold text-brand-green mb-4 flex items-center gap-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
+                        居家收納整潔
+                    </h3>
+                    <ul class="list-disc list-inside text-xl text-gray-700 dark:text-gray-300 space-y-3 marker:text-brand-green">
+                        <li>一目了然實用收納盒，找東西不用翻箱倒櫃。</li>
+                        <li>防塵防潮好幫手，保護換季衣物與棉被。</li>
+                        <li>善用角落空間，讓家裡清爽大空間。</li>
+                    </ul>
+                </div>
+
+                <!-- 類別 3 -->
+                <div class="bg-white dark:bg-brand-carddark p-6 md:p-8 rounded-3xl shadow-md border-l-8 border-blue-500">
+                    <h3 class="text-2xl font-bold text-blue-500 mb-4 flex items-center gap-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                        貼心個人日常
+                    </h3>
+                    <ul class="list-disc list-inside text-xl text-gray-700 dark:text-gray-300 space-y-3 marker:text-blue-500">
+                        <li>純棉親膚柔軟毛巾，給肌膚最好的呵護。</li>
+                        <li>保溫保冷隨身水壺，出門隨時補充水分。</li>
+                        <li>居家護理健康小物，好好照顧自己與家人。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 評價區塊 (Testimonials) -->
+    <section class="py-16 bg-orange-100 dark:bg-gray-800">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800 dark:text-white">群裡的好朋友怎麼說？</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- 評價 1 -->
+                <div class="bg-white dark:bg-brand-carddark p-6 rounded-2xl shadow relative">
+                    <div class="text-brand-orange text-4xl absolute top-4 right-4 opacity-20">"</div>
+                    <p class="text-lg text-gray-700 dark:text-gray-300 mb-4 relative z-10">
+                        「跟著買真的沒失望過，比自己去外面亂買好用太多了！價格也很公道。」
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-pink-200 rounded-full flex items-center justify-center text-pink-700 font-bold text-xl">林</div>
+                        <span class="font-bold text-gray-900 dark:text-gray-100">台北 林大姐</span>
+                    </div>
+                </div>
+
+                <!-- 評價 2 -->
+                <div class="bg-white dark:bg-brand-carddark p-6 rounded-2xl shadow relative">
+                    <div class="text-brand-orange text-4xl absolute top-4 right-4 opacity-20">"</div>
+                    <p class="text-lg text-gray-700 dark:text-gray-300 mb-4 relative z-10">
+                        「有問題在 LINE 群問都回得好親切，像在跟老朋友聊天一樣，不用怕買錯。」
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-purple-200 rounded-full flex items-center justify-center text-purple-700 font-bold text-xl">陳</div>
+                        <span class="font-bold text-gray-900 dark:text-gray-100">基隆 陳媽媽</span>
+                    </div>
+                </div>
+
+                <!-- 評價 3 -->
+                <div class="bg-white dark:bg-brand-carddark p-6 rounded-2xl shadow relative">
+                    <div class="text-brand-orange text-4xl absolute top-4 right-4 opacity-20">"</div>
+                    <p class="text-lg text-gray-700 dark:text-gray-300 mb-4 relative z-10">
+                        「下單很方便，蝦皮寄送快，貨到付款也安心！這點對我們長輩來說很重要。」
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-blue-200 rounded-full flex items-center justify-center text-blue-700 font-bold text-xl">張</div>
+                        <span class="font-bold text-gray-900 dark:text-gray-100">台中 張阿姨</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 購買選項與表單 (Order Options & Form) -->
+    <section id="order" class="py-16 px-4">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-gray-800 dark:text-white">三種方便方式，選您最習慣的來下單！</h2>
+            
+            <div class="bg-white dark:bg-brand-carddark rounded-3xl shadow-xl overflow-hidden">
+                <div class="p-6 md:p-10 border-b border-gray-100 dark:border-gray-700">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                        <div class="p-4">
+                            <div class="w-16 h-16 mx-auto bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-4">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                            </div>
+                            <h4 class="font-bold text-xl mb-2 text-gray-900 dark:text-white">1. LINE 群即時諮詢</h4>
+                            <p class="text-gray-600 dark:text-gray-400">想問規格、聊心得？點擊加入群組，第一時間為您解答。</p>
+                        </div>
+                        <div class="p-4">
+                            <div class="w-16 h-16 mx-auto bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mb-4">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                            </div>
+                            <h4 class="font-bold text-xl mb-2 text-gray-900 dark:text-white">2. 蝦皮購物下單</h4>
+                            <p class="text-gray-600 dark:text-gray-400">習慣看評價、超商取貨付款的朋友，前往賣場最快速。</p>
+                        </div>
+                        <div class="p-4">
+                            <div class="w-16 h-16 mx-auto bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                            </div>
+                            <h4 class="font-bold text-xl mb-2 text-gray-900 dark:text-white">3. 網站直接填表</h4>
+                            <p class="text-gray-600 dark:text-gray-400">沒有蝦皮帳號？填寫下方表單，專人為您處理寄出。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 訂購表單 -->
+                <div class="p-6 md:p-10 bg-orange-50 dark:bg-gray-800/50">
+                    <h3 class="text-2xl font-bold text-center mb-8 text-brand-orange">📋 網站快速登記表</h3>
+                    
+                    <!-- 提交成功訊息 (預設隱藏) -->
+                    <div id="success-message" class="hidden mb-8 p-6 bg-green-100 text-green-800 rounded-2xl text-center text-xl font-bold">
+                        ✅ 您的表單已成功送出！我們將盡快與您聯絡。
+                    </div>
+
+                    <form id="order-form" class="space-y-6 max-w-2xl mx-auto text-lg">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="name" class="block font-bold text-gray-700 dark:text-gray-300 mb-2">您的姓名 / 暱稱 <span class="text-red-500">*</span></label>
+                                <input type="text" id="name" required class="form-input w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 dark:text-white text-lg">
+                            </div>
+                            <div>
+                                <label for="phone" class="block font-bold text-gray-700 dark:text-gray-300 mb-2">聯絡電話 <span class="text-red-500">*</span></label>
+                                <input type="tel" id="phone" required class="form-input w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 dark:text-white text-lg">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="items" class="block font-bold text-gray-700 dark:text-gray-300 mb-2">想詢問或購買的商品與數量 <span class="text-red-500">*</span></label>
+                            <textarea id="items" rows="3" required placeholder="例如：神奇不沾鍋 x1, 舒適毛巾 x2" class="form-input w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 dark:text-white text-lg"></textarea>
+                        </div>
+
+                        <div>
+                            <label for="shipping" class="block font-bold text-gray-700 dark:text-gray-300 mb-2">收件方式 (門市名稱 或 宅配地址) <span class="text-red-500">*</span></label>
+                            <input type="text" id="shipping" required placeholder="例如：7-11 信義門市 或 台北市信義區..." class="form-input w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 dark:text-white text-lg">
+                        </div>
+
+                        <div>
+                            <label for="notes" class="block font-bold text-gray-700 dark:text-gray-300 mb-2">備註需求 (選填)</label>
+                            <textarea id="notes" rows="2" class="form-input w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 dark:text-white text-lg"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full bg-brand-orange hover:bg-orange-600 text-white font-bold text-2xl py-4 rounded-xl shadow-lg transition transform hover:-translate-y-1">
+                            送出登記表單
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 頁尾 (Footer) -->
+    <footer class="bg-gray-900 text-white py-12 px-4 text-center">
+        <div class="max-w-4xl mx-auto">
+            <h3 class="text-2xl font-bold mb-4 text-brand-orange">鄰里好康站</h3>
+            <p class="text-lg text-gray-400 mb-8 max-w-2xl mx-auto">
+                感謝每一位朋友的支持與信任，我們用心挑選，只為給您最溫暖的生活陪伴！
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mb-10">
+                <a href="https://line.me/ti/p/~e0e016888" target="_blank" class="inline-block bg-brand-green hover:bg-emerald-600 text-white font-bold py-3 px-8 rounded-full transition">
+                    🟢 加入 LINE 群領好康
+                </a>
+                <button type="button" class="inline-block bg-transparent border-2 border-brand-orange text-brand-orange hover:bg-brand-orange hover:text-white font-bold py-3 px-8 rounded-full transition">
+                    🟠 前往 蝦皮賣場
+                </button>
+            </div>
+            
+            <p class="text-sm text-gray-500">
+                &copy; 2026 鄰里好康站 版權所有. All rights reserved. <br>
+                LINE ID: e0e016888
+            </p>
+        </div>
+    </footer>
+
+    <!-- 互動邏輯 (JavaScript) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. 深淺色模式切換邏輯
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const htmlElement = document.documentElement;
+            
+            // 檢查本地儲存是否有設定偏好，若無則依系統預設
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                htmlElement.classList.add('dark');
+            } else {
+                htmlElement.classList.remove('dark');
+            }
+
+            themeToggleBtn.addEventListener('click', () => {
+                htmlElement.classList.toggle('dark');
+                if (htmlElement.classList.contains('dark')) {
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+
+            // 2. 背景音樂開關邏輯
+            const bgMusic = document.getElementById('bg-music');
+            const musicToggleBtn = document.getElementById('music-toggle');
+            const iconMusicOff = document.getElementById('icon-music-off');
+            const iconMusicOn = document.getElementById('icon-music-on');
+            let isPlaying = false;
+
+            // 預設音量調低一點，避免驚嚇長輩
+            bgMusic.volume = 0.5; 
+
+            musicToggleBtn.addEventListener('click', () => {
+                if (isPlaying) {
+                    bgMusic.pause();
+                    iconMusicOn.classList.add('hidden');
+                    iconMusicOff.classList.remove('hidden');
+                } else {
+                    // 嘗試播放，如果被瀏覽器阻擋會有 catch
+                    bgMusic.play().then(() => {
+                        iconMusicOff.classList.add('hidden');
+                        iconMusicOn.classList.remove('hidden');
+                    }).catch(error => {
+                        console.log("播放被阻擋:", error);
+                        // 不使用 alert，由介面狀態反映
+                    });
+                }
+                isPlaying = !isPlaying;
+            });
+
+            // 3. 表單送出模擬邏輯
+            const orderForm = document.getElementById('order-form');
+            const successMessage = document.getElementById('success-message');
+
+            orderForm.addEventListener('submit', (e) => {
+                e.preventDefault(); // 阻止表單重整頁面
+                
+                // 隱藏表單，顯示成功訊息
+                orderForm.style.display = 'none';
+                successMessage.classList.remove('hidden');
+                
+                // 將畫面捲動到成功訊息的位置
+                successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // 在實際應用中，這裡會是 fetch/AJAX 請求送到後端
+            });
+        });
+    </script>
+</body>
+</html>
