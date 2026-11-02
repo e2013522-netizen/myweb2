@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>塔羅與數字易經 - 命理綜合解析</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React & ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&display=swap');
+        
+        body {
+            font-family: 'Noto Serif TC', serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,0.2) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,0.2) 0, transparent 50%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .transition-transform { transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+
+        // --- Data: 詳細塔羅大阿爾克那 (Major Arcana) ---
+        const TAROT_DECK = [
+            { id: 0, name: "0. 愚者 (The Fool)", upright: "新的開始、無限可能、天真純真、冒險精神、信任直覺。", reversed: "魯莽行事、不負責任、盲目樂觀、錯失良機、風險過高。", img: "🌟", element: "風元素", advice: "放下過往包袱，勇敢跨出舒適圈，但別忘了注意腳下的路。" },
+            { id: 1, name: "1. 魔術師 (The Magician)", upright: "意志力、顯化能力、創造力、溝通專長、自信與實踐。", reversed: "意志不堅、能力被懷疑、欺騙、溝通不良、才華受阻。", img: "🪄", element: "水元素", advice: "你手中擁有實現願景的一切工具，現在正是集中精神付諸行動的時刻。" },
+            { id: 2, name: "2. 女祭司 (The High Priestess)", upright: "內在直覺、潛意識、神秘與智慧、保持冷靜、靜觀其變。", reversed: "直覺閉塞、內心不安、秘密被揭發、情緒化、冷漠孤立。", img: "🌙", element: "水元素", advice: "傾聽內心最深處的聲音。有些答案不必急著向外尋求，靜心即是力量。" },
+            { id: 3, name: "3. 皇后 (The Empress)", upright: "豐饒富足、母性關懷、創造力、藝術靈感、大自然的滋養。", reversed: "過度保護、依賴心重、荒蕪停滯、失去自我照顧、奢侈浮華。", img: "👑", element: "土元素", advice: "愛護自己與身邊的人，像大地般包容。關注美學、享受生活中的豐盛溫暖。" },
+            { id: 4, name: "4. 皇帝 (The Emperor)", upright: "權威地位、組織架構、穩固基礎、理性領導、責任感。", reversed: "獨裁專斷、死板教條、失去控制、缺乏彈性、領導無方。", img: "🛡️", element: "火元素", advice: "建立規則與秩序，用理性和邏輯來面對混亂，展現你的擔當。" },
+            { id: 5, name: "5. 教皇 (The Hierophant)", upright: "傳統精神、心靈導師、道德規範、團體歸屬、學習新知。", reversed: "墨守成規、反叛體制、盲目迷信、教條主義、虛偽不實。", img: "📜", element: "土元素", advice: "向具備智慧的前輩或古老傳統尋求指引，遵循既有的正道行事。" },
+            { id: 6, name: "6. 戀人 (The Lovers)", upright: "深刻愛戀、價值觀契合、重要抉擇、和諧關係、靈魂共鳴。", reversed: "價值觀衝突、情感背叛、猶豫不決、不健康的依附關係。", img: "💞", element: "風元素", advice: "審視內心的真正渴望，做出對靈魂誠實的選擇，並為之承擔責任。" },
+            { id: 7, name: "7. 戰車 (The Chariot)", upright: "意志勝利、突破重圍、堅定目標、凱旋而歸、強大自律。", reversed: "失去控制、方向迷失、遭遇阻礙、內心拉扯、急躁冒進。", img: "🛏️", element: "水元素", advice: "駕馭內心的衝突與情緒，保持堅定的方向，勇往直前必能衝破難關。" },
+            { id: 8, name: "8. 力量 (Strength)", upright: "柔能克剛、內在勇氣、耐心包容、自制力、馴服恐懼。", reversed: "自我懷疑、失去耐心、脾氣暴躁、內心虛弱、衝動行事。", img: "🦁", element: "火元素", advice: "真正的力量來自於溫柔與理解，用耐心和愛心來面對困境與心中的野獸。" },
+            { id: 9, name: "9. 隱者 (The Hermit)", upright: "內省沉思、追求真理、獨處時光、心靈導師、明燈指引。", /**********/ reversed: "過度孤立、離群索居、固執己見、抗拒社交、迷失方向。", img: "🏮", element: "土元素", advice: "暫時遠離外界的喧囂與雜音，向內探索，你將找到屬於自己的真理之光。" },
+            { id: 10, name: "10. 命運之輪 (Wheel of Fortune)", upright: "命運轉機、幸運降臨、順應循環、意料之外的轉變。", reversed: "走低潮期、抗拒改變、命運捉弄、錯失契機、無常感重。", img: "🎡", element: "火元素", advice: "世事無常，順應潮流。好運時把握當下，低谷時保持耐心等待下一次轉動。" },
+            { id: 11, name: "11. 正義 (Justice)", upright: "公平公正、因果報應、理性判斷、簽署合約、真相大白。", reversed: "偏見不公、逃避責任、法律糾紛、失衡、自私自利。", img: "⚖️", element: "風元素", advice: "保持客觀中立，做出符合道德與理智的決定，因果終將迴盪。" },
+            { id: 12, name: "12. 倒吊人 (The Hanged Man)", upright: "換位思考、心甘情願的犧牲、暫停腳步、精神昇華。", reversed: "無謂的犧牲、僵局不前、固執不化、抱怨連連、白費心機。", img: "🪢", element: "水元素", advice: "當局者迷，不妨把世界倒過來看。換個角度，你會發現完全不同的風景。" },
+            { id: 13, name: "13. 死神 (Death)", upright: "階段性結束、徹底轉變、浴火重生、斷捨離、迎接新生。", reversed: "抗拒結束、拖泥帶水、害怕改變、停滯不前、慢性折磨。", img: "💀", element: "水元素", advice: "勇敢放手那些已經腐朽、不再適合你的事物。結束，正是下一個精彩的開始。" },
+            { id: 14, name: "14. 節制 (Temperance)", upright: "身心平衡、調和融合、耐心等待、適度原則、療癒修復。", reversed: "失去平衡、極端行事、內心衝突、缺乏節制、溝通破裂。", img: "🍷", element: "火元素", advice: "將不同的元素完美融合，保持平和與中庸，急躁無法解決任何問題。" },
+            { id: 15, name: "15. 惡魔 (The Devil)", upright: "物質誘惑、執著束縛、內心恐懼、不健康關係、上癮。", reversed: "打破枷鎖、重獲自由、覺醒解脫、擺脫控制、走出陰霾。", img: "⛓️", element: "土元素", advice: "看清那些禁錮你的物質欲望或有害關係，解鈴還須繫鈴人，你有自由離開。" },
+            { id: 16, name: "16. 高塔 (The Tower)", upright: "突發劇變、打破舊結構、震撼啟示、推倒重來、危機意識。", reversed: "逃過一劫、災難延後、內心動搖、拒絕面對現實的崩塌。", img: "🌩️", element: "火元素", advice: "虛假的基礎終究會倒塌。接受突如其來的衝擊，把它當作重建堅固未來的契機。" },
+            { id: 17, name: "17. 星星 (The Star)", upright: "希望之光、靈感湧現、平靜療癒、未來願景、信心恢復。", reversed: "信心喪失、悲觀失望、理想破滅、缺乏靈感、迷茫。", img: "✨", element: "風元素", advice: "黑夜已過，黎明將至。保持心中的希望與純真，宇宙正在為你指引方向。" },
+            { id: 18, name: "18. 月亮 (The Moon)", upright: "潛意識、幻覺與不安、直覺敏感、隱藏的真相、迷惘。", reversed: "疑慮消除、看清真相、走出恐懼、不安漸漸退散。", img: "🌝", element: "水元素", advice: "面對心中的恐懼與不安，那些多半是自己嚇自己。相信直覺，辨別虛幻與現實。" },
+            { id: 19, name: "19. 太陽 (The Sun)", upright: "極大成功、純粹喜悅、充滿活力、清晰明朗、生命力旺盛。", reversed: "短暫陰霾、過度自信、成功稍有延遲、缺乏熱情。", img: "☀️", element: "火元素", advice: "敞開心胸接受陽光的洗禮吧！保持樂觀與積極，歡樂與豐盛就在眼前。" },
+            { id: 20, name: "20. 審判 (Judgement)", upright: "復活覺醒、重大抉擇、聽到內心呼喚、業力總結、重生。", reversed: "自我懷疑、逃避審判、後悔莫及、無法原諒自己。", img: "🎺", element: "火元素", advice: "回顧過去的經歷，傾聽靈魂深處的最終召喚，做出轉化一生的重大決定。" },
+            { id: 21, name: "21. 世界 (The World)", upright: "圓滿結局、任務達成、跨越瓶頸、世界在我手中、融合。", reversed: "差一點點完成、缺乏收尾、停滯在最後關頭、孤立。", img: "🌍", element: "土元素", advice: "恭喜你，一段旅程圓滿畫下句點。享受豐碩的成果，準備迎接更高層次的下一章。" }
+        ];
+
+        // --- Data: 數字易經八大磁場 ---
+        const I_CHING_MAPPING = {
+            "13": "天醫", "31": "天醫", "68": "天醫", "86": "天醫", "49": "天醫", "94": "天醫", "27": "天醫", "72": "天醫",
+            "19": "延年", "91": "延年", "78": "延年", "87": "延年", "34": "延年", "43": "延年", "26": "延年", "62": "延年",
+            "14": "生氣", "41": "生氣", "67": "生氣", "76": "生氣", "39": "生氣", "93": "生氣", "28": "生氣", "82": "生氣",
+            "11": "伏位", "22": "伏位", "33": "伏位", "44": "伏位", "66": "伏位", "77": "伏位", "88": "伏位", "99": "伏位",
+            "12": "絕命", "21": "絕命", "69": "絕命", "96": "絕命", "48": "絕命", "84": "絕命", "37": "絕命", "73": "絕命",
+            "18": "五鬼", "81": "五鬼", "79": "五鬼", "97": "五鬼", "36": "五鬼", "63": "五鬼", "24": "五鬼", "42": "五鬼",
+            "16": "六煞", "61": "六煞", "47": "六煞", "74": "六煞", "38": "六煞", "83": "六煞", "29": "六煞", "92": "六煞",
+            "17": "禍害", "71": "禍害", "89": "禍害", "98": "禍害", "46": "禍害", "64": "禍害", "23": "禍害", "32": "禍害"
+        };
+
+        const FIELD_INFO = {
+            "天醫": { type: "吉", color: "text-green-400", bg: "bg-green-900/30", border: "border-green-500", desc: "主大財、正桃花、聰明。代表財富與醫療，容易遇到貴人相助，感情穩定。" },
+            "延年": { type: "吉", color: "text-blue-400", bg: "bg-blue-900/30", border: "border-blue-500", desc: "主事業、領導、健康。責任心強，有大將之風，適合主管階級，固執但也懂得理財。" },
+            "生氣": { type: "吉", color: "text-emerald-400", bg: "bg-emerald-900/30", border: "border-emerald-500", desc: "主貴人、朋友、開心。隨遇而安，人緣極佳，逢凶化吉，但有時較無主見。" },
+            "伏位": { type: "吉", color: "text-teal-400", bg: "bg-teal-900/30", border: "border-teal-500", desc: "主等待、蓄勢待發、保守。喜歡穩定，不愛變動，做事按部就班，需要耐心。" },
+            "絕命": { type: "凶", color: "text-red-400", bg: "bg-red-900/30", border: "border-red-500", desc: "主投資、極端、破財。敢拚敢衝，情緒起伏大，容易有官司或文書問題，不善理財。" },
+            "五鬼": { type: "凶", color: "text-purple-400", bg: "bg-purple-900/30", border: "border-purple-500", desc: "主變動、才華、血光。點子多，心思敏捷，但也容易不穩定、多疑，易有突發狀況。" },
+            "六煞": { type: "凶", color: "text-pink-400", bg: "bg-pink-900/30", border: "border-pink-500", desc: "主偏桃花、人際糾紛、憂鬱。心思細膩，異性緣好，但容易為情所困，優柔寡斷。" },
+            "禍害": { type: "凶", color: "text-orange-400", bg: "bg-orange-900/30", border: "border-orange-500", desc: "主口舌、是非、疾病。能言善道，適合靠嘴吃飯的行業，但容易得罪人，免疫力較弱。" }
+        };
+
+        const App = () => {
+            const [activeTab, setActiveTab] = useState('tarot');
+            
+            // Tarot State
+            const [drawnCards, setDrawnCards] = useState([]);
+            const [isDrawing, setIsDrawing] = useState(false);
+            const [selectedCardDetail, setSelectedCardDetail] = useState(null);
+
+            // IChing State
+            const [numberInput, setNumberInput] = useState("");
+            const [ichingResult, setIchingResult] = useState([]);
+            const [dominantField, setDominantField] = useState(null);
+
+            // Draw Tarot Cards (3張：過去、現在、未來)
+            const drawTarot = () => {
+                if (isDrawing) return;
+                setIsDrawing(true);
+                setDrawnCards([]);
+                setSelectedCardDetail(null);
+                
+                setTimeout(() => {
+                    // 隨機抽3張不重複的牌
+                    const shuffled = [...TAROT_DECK].sort(() => 0.5 - Math.random());
+                    const selected = shuffled.slice(0, 3).map((card, index) => {
+                        const isReversed = Math.random() < 0.35; // 35% 機會逆位
+                        return {
+                            ...card,
+                            position: index === 0 ? "過去 (Past)" : index === 1 ? "現在 (Present)" : "未來 (Future)",
+                            isReversed: isReversed,
+                            isFlipped: false
+                        };
+                    });
+                    
+                    setDrawnCards(selected);
+                    
+                    // 依序翻牌動畫
+                    selected.forEach((_, i) => {
+                        setTimeout(() => {
+                            setDrawnCards(prev => {
+                                const newCards = [...prev];
+                                if(newCards[i]) newCards[i].isFlipped = true;
+                                return newCards;
+                            });
+                        }, (i + 1) * 700);
+                    });
+                    
+                    setIsDrawing(false);
+                }, 400);
+            };
+
+            // Analyze Numbers
+            const analyzeNumbers = () => {
+                if (!numberInput || numberInput.length < 2) return;
+                
+                let cleanNum = numberInput.replace(/\D/g, '');
+                let coreNum = cleanNum.replace(/[05]/g, ''); 
+                if (coreNum.length < 2) {
+                     coreNum = cleanNum;
+                }
+
+                const results = [];
+                const fieldCounts = {};
+
+                for (let i = 0; i < coreNum.length - 1; i++) {
+                    const pair = coreNum.substring(i, i + 2);
+                    const fieldName = I_CHING_MAPPING[pair];
+                    
+                    if (fieldName) {
+                        results.push({
+                            pair,
+                            fieldName,
+                            ...FIELD_INFO[fieldName]
+                        });
+                        fieldCounts[fieldName] = (fieldCounts[fieldName] || 0) + 1;
+                    } else if (pair[0] === pair[1]) {
+                        results.push({
+                            pair,
+                            fieldName: "伏位",
+                            ...FIELD_INFO["伏位"]
+                        });
+                        fieldCounts["伏位"] = (fieldCounts["伏位"] || 0) + 1;
+                    }
+                }
+
+                setIchingResult(results);
+
+                if (Object.keys(fieldCounts).length > 0) {
+                    const dominant = Object.keys(fieldCounts).reduce((a, b) => fieldCounts[a] > fieldCounts[b] ? a : b);
+                    setDominantField(dominant);
+                } else {
+                    setDominantField(null);
+                }
+            };
+
+            // Calculate Combined Advice
+            const combinedAdvice = useMemo(() => {
+                if (drawnCards.length !== 3 || !dominantField) return null;
+                
+                const presentCard = drawnCards[1];
+                const futureCard = drawnCards[2];
+                const fieldType = FIELD_INFO[dominantField].type;
+
+                let advice = `🌟 【命理綜合解讀報告】\n\n`;
+                advice += `您的數字核心磁場為【${dominantField}】（屬${fieldType}星），搭配當前塔羅現況【${presentCard.name} (${presentCard.isReversed ? '逆位' : '正位'})】與未來指引【${futureCard.name} (${futureCard.isReversed ? '逆位' : '正位'})】。\n\n`;
+
+                if (fieldType === '吉') {
+                    advice += `整體能量正向且充滿機會。您的內在潛能與數字磁場相互輝映，特別適合在事業、財富或人際上大展身手。塔羅提示您：保持現有的節奏，穩健前行，同時多聆聽直覺，未來的成果將非常豐碩。`;
+                } else {
+                    advice += `目前磁場帶有挑戰與轉變的考驗。數字顯示您正經歷心態或環境的轉折，而塔羅牌也提醒您需特別留意細節與情緒管理。這是一段適合內省、打破舊有盲點並尋求突破的珍貴時期，危機往往就是轉機。`;
+                }
+                return advice;
+            }, [drawnCards, dominantField]);
+
+            return (
+                <div className="max-w-4xl mx-auto p-4 md:p-6 pb-20">
+                    {/* Header */}
+                    <header className="text-center my-8">
+                        <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-yellow-500 mb-3 tracking-wider">
+                            秘境指引：塔羅與數字易經
+                        </h1>
+                        <p className="text-slate-400 text-sm md:text-base">探索大阿爾克那的時間之流，解碼數字磁場的命理奧秘</p>
+                    </header>
+
+                    {/* Navigation Tabs */}
+                    <div className="flex justify-center mb-8 space-x-2 md:space-x-4">
+                        <button 
+                            onClick={() => setActiveTab('tarot')}
+                            className={`px-5 py-2.5 rounded-full font-medium transition-all duration-300 ${activeTab === 'tarot' ? 'bg-amber-600/20 text-amber-400 border border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.3)]' : 'bg-slate-800/50 text-slate-400 hover:text-slate-200'}`}
+                        >
+                            🔮 塔羅陣法解析
+                        </button>
+                        <button 
+                            onClick={() => setActiveTab('iching')}
+                            className={`px-5 py-2.5 rounded-full font-medium transition-all duration-300 ${activeTab === 'iching' ? 'bg-blue-600/20 text-blue-400 border border-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.3)]' : 'bg-slate-800/50 text-slate-400 hover:text-slate-200'}`}
+                        >
+                            🔢 數字易經磁場
+                        </button>
+                        <button 
+                            onClick={() => setActiveTab('combined')}
+                            disabled={drawnCards.length !== 3 || !dominantField}
+                            className={`px-5 py-2.5 rounded-full font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${activeTab === 'combined' ? 'bg-purple-600/20 text-purple-400 border border-purple-500/50 shadow-[0_0_15px_rgba(168,85,247,0.3)]' : 'bg-slate-800/50 text-slate-400 hover:text-slate-200'}`}
+                        >
+                            ✨ 綜合命理秘語
+                        </button>
+                    </div>
+
+                    {/* Main Content Area */}
+                    <main className="min-h-[450px]">
+                        
+                        {/* 1. Tarot Section */}
+                        {activeTab === 'tarot' && (
+                            <div className="animate-[fadeIn_0.5s_ease-out]">
+                                <div className="text-center mb-8">
+                                    <button 
+                                        onClick={drawTarot}
+                                        disabled={isDrawing}
+                                        className="bg-gradient-to-r from-amber-700 to-amber-500 hover:from-amber-600 hover:to-amber-400 text-white font-bold py-3.5 px-8 rounded-full shadow-lg transform transition active:scale-95 disabled:opacity-70 cursor-pointer"
+                                    >
+                                        {isDrawing ? '正在感應星象與牌陣...' : '🔮 抽取時間之流牌陣 (過去 / 現在 / 未來)'}
+                                    </button>
+                                    <p className="text-xs text-slate-400 mt-3">請閉上雙眼默念您的困惑，然後點擊按鈕抽取您的專屬牌卡</p>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 perspective-1000">
+                                    {drawnCards.map((card, idx) => (
+                                        <div key={idx} className="flex flex-col items-center">
+                                            <div className="text-amber-400 font-bold mb-3 tracking-widest text-sm border-b border-amber-900/60 pb-1">
+                                                {card.position}
+                                            </div>
+                                            
+                                            <div 
+                                                onClick={() => card.isFlipped && setSelectedCardDetail(card)}
+                                                className={`w-48 h-72 md:w-56 md:h-80 relative transform-style-3d transition-transform duration-700 cursor-pointer ${card.isFlipped ? 'hover:scale-105' : ''}`}
+                                                 style={{ transform: card.isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }}
+                                            >
+                                                {/* Card Back */}
+                                                <div className="absolute w-full h-full backface-hidden rounded-xl border-2 border-slate-700 shadow-xl bg-slate-800 flex items-center justify-center">
+                                                    <div className="w-11/12 h-[95%] border border-slate-600/60 rounded-lg flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800">
+                                                        <span className="text-5xl opacity-30 text-amber-300">👁️</span>
+                                                    </div>
+                                                </div>
+
+                                                {/* Card Front */}
+                                                <div className={`absolute w-full h-full backface-hidden rotate-y-180 rounded-xl border-2 ${card.isReversed ? 'border-purple-600/60' : 'border-amber-600/60'} shadow-[0_0_20px_rgba(217,119,6,0.2)] bg-slate-900 overflow-hidden flex flex-col p-4`}>
+                                                    <div className="flex justify-between items-center text-xs text-slate-400">
+                                                        <span>{card.element}</span>
+                                                        <span className={`px-2 py-0.5 rounded ${card.isReversed ? 'bg-purple-900/60 text-purple-300' : 'bg-amber-900/60 text-amber-300'}`}>
+                                                            {card.isReversed ? '逆位' : '正位'}
+                                                        </span>
+                                                    </div>
+                                                    
+                                                    <div className="text-center text-5xl my-4">{card.img}</div>
+                                                    <h3 className="text-center font-bold text-amber-100 text-base border-b border-amber-800/40 pb-2">{card.name}</h3>
+                                                    
+                                                    <div className="mt-3 text-xs text-slate-300 leading-relaxed overflow-y-auto max-h-28 pr-1">
+                                                        <p className="font-semibold text-amber-200/90 mb-1">
+                                                            {card.isReversed ? '【逆位核心】' : '【正位核心】'}
+                                                        </p>
+                                                        {card.isReversed ? card.reversed : card.upright}
+                                                    </div>
+                                                    <div className="mt-auto text-[10px] text-slate-400 text-center pt-2 border-t border-slate-800">
+                                                        點擊查看詳細解說
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                    {drawnCards.length === 0 && !isDrawing && (
+                                        <div className="col-span-1 md:col-span-3 text-center text-slate-400 py-16 border border-dashed border-slate-700 rounded-2xl bg-slate-900/40">
+                                            牌陣尚未開啟，點擊上方按鈕接收您的塔羅指引
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Detailed Modal or Panel for Selected Card */}
+                                {selectedCardDetail && (
+                                    <div className="mt-10 bg-slate-800/80 border border-amber-500/40 rounded-2xl p-6 backdrop-blur-md shadow-2xl relative animate-[fadeIn_0.3s_ease-out]">
+                                        <button 
+                                            onClick={() => setSelectedCardDetail(null)}
+                                            className="absolute top-4 right-4 text-slate-400 hover:text-white bg-slate-900/60 px-3 py-1 rounded-full text-xs"
+                                        >
+                                            ✕ 關閉詳情
+                                        </button>
+                                        <div className="flex items-center gap-3 mb-3">
+                                            <span className="text-3xl">{selectedCardDetail.img}</span>
+                                            <div>
+                                                <h4 className="text-xl font-bold text-amber-300">{selectedCardDetail.name}</h4>
+                                                <span className="text-xs text-slate-400">{selectedCardDetail.position} - {selectedCardDetail.isReversed ? '逆位解析' : '正位解析'}</span>
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 text-sm text-slate-300">
+                                            <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-700">
+                                                <strong className="text-amber-400 block mb-1">📋 牌意深度解析：</strong>
+                                                <p className="leading-relaxed">{selectedCardDetail.isReversed ? selectedCardDetail.reversed : selectedCardDetail.upright}</p>
+                                            </div>
+                                            <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-700">
+                                                <strong className="text-amber-400 block mb-1">💡 靈性導師建議：</strong>
+                                                <p className="leading-relaxed">{selectedCardDetail.advice}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        {/* 2. I-Ching Section */}
+                        {activeTab === 'iching' && (
+                            <div className="animate-[fadeIn_0.5s_ease-out] max-w-2xl mx-auto">
+                                <div className="bg-slate-800/60 p-6 rounded-2xl border border-slate-700 shadow-xl backdrop-blur-sm">
+                                    <h2 className="text-2xl font-bold text-blue-300 mb-3 flex items-center">
+                                        <span className="mr-2">🔢</span> 數字易經八大磁場解析
+                                    </h2>
+                                    <p className="text-slate-400 text-sm mb-6 leading-relaxed">
+                                        輸入您的手機號碼、身分證字號、車牌或任何日常數字。系統會將數字兩兩配對，精準分析其中的八大磁場吉凶。
+                                    </p>
+                                    
+                                    <div className="flex flex-col sm:flex-row gap-3">
+                                        <input 
+                                            type="text" 
+                                            value={numberInput}
+                                            onChange={(e) => setNumberInput(e.target.value)}
+                                            placeholder="例如：0912345678"
+                                            className="flex-1 bg-slate-900 border border-slate-600 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500 font-mono tracking-widest text-lg"
+                                        />
+                                        <button 
+                                            onClick={analyzeNumbers}
+                                            className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-lg transition-colors whitespace-nowrap cursor-pointer"
+                                        >
+                                            開始拆解磁場
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {ichingResult.length > 0 && (
+                                    <div className="mt-8 space-y-4">
+                                        <div className="flex items-center justify-between border-b border-slate-700 pb-2">
+                                            <h3 className="text-xl font-semibold text-slate-200">數字磁場組合分析</h3>
+                                            {dominantField && (
+                                                <span className="text-sm px-3 py-1 bg-indigo-900/50 text-indigo-300 rounded-full border border-indigo-700/50">
+                                                    最強勢磁場：{dominantField}
+                                                </span>
+                                            )}
+                                        </div>
+                                        
+                                        <div className="grid grid-cols-1 gap-4">
+                                            {ichingResult.map((res, idx) => (
+                                                <div key={idx} className={`p-4 rounded-xl border ${res.bg} ${res.border} flex flex-col sm:flex-row items-start sm:items-center gap-4 transition-all hover:scale-[1.01]`}>
+                                                    <div className="bg-slate-900 px-4 py-2 rounded-lg font-mono text-xl tracking-widest text-slate-200 shadow-inner border border-slate-800">
+                                                        {res.pair}
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <div className="flex items-center gap-2 mb-1">
+                                                            <h4 className={`text-lg font-bold ${res.color}`}>{res.fieldName}</h4>
+                                                            <span className={`text-xs px-2.5 py-0.5 rounded-full ${res.type === '吉' ? 'bg-green-900/50 text-green-300' : 'bg-red-900/50 text-red-300'}`}>
+                                                                {res.type}星
+                                                            </span>
+                                                        </div>
+                                                        <p className="text-sm text-slate-300 leading-relaxed">
+                                                            {res.desc}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        {/* 3. Combined Section */}
+                        {activeTab === 'combined' && (
+                            <div className="animate-[fadeIn_0.5s_ease-out] max-w-2xl mx-auto">
+                                <div className="bg-gradient-to-br from-purple-900/40 to-slate-900 p-8 rounded-3xl border border-purple-500/30 shadow-[0_0_30px_rgba(168,85,247,0.15)] relative overflow-hidden">
+                                    
+                                    <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-purple-500/20 blur-3xl rounded-full"></div>
+                                    <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-blue-500/20 blur-3xl rounded-full"></div>
+                                    
+                                    <div className="relative z-10">
+                                        <h2 className="text-3xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300 mb-8">
+                                            ✨ 塔羅與數字易經交匯指引
+                                        </h2>
+                                        
+                                        <div className="flex flex-col md:flex-row justify-center items-center gap-6 mb-8 p-4 bg-black/30 rounded-2xl border border-white/5">
+                                            <div className="text-center">
+                                                <div className="text-xs text-slate-400 mb-1">數位主導磁場</div>
+                                                <div className={`text-xl font-bold ${dominantField ? FIELD_INFO[dominantField]?.color : 'text-slate-400'}`}>
+                                                    {dominantField || '尚未分析'}
+                                                </div>
+                                            </div>
+                                            <div className="text-slate-500 text-xl font-light">×</div>
+                                            <div className="text-center">
+                                                <div className="text-xs text-slate-400 mb-1">塔羅現在牌</div>
+                                                <div className="text-xl font-bold text-amber-400">
+                                                    {drawnCards[1] ? drawnCards[1].name.split(' ')[1] : '尚未抽牌'}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="prose prose-invert text-slate-300 bg-slate-800/50 p-6 rounded-xl border border-slate-700/50">
+                                            <p className="whitespace-pre-line text-base leading-loose">
+                                                {combinedAdvice}
+                                            </p>
+                                        </div>
+                                        
+                                        <div className="mt-8 text-center text-xs text-slate-500">
+                                            * 命理占卜旨在提供心靈啟發與方向參考，未來的命運始終掌握在您的選擇手中。
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                    </main>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</body>
+</html>

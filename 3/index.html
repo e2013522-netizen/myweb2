@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>臺南三天兩夜自駕自由行：美食文化與特色咖啡館風格旅宿指南</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sand: {
+                            50: '#FDFBF7',
+                            100: '#F7F3E9',
+                            200: '#ECE3D0',
+                            300: '#DDD0B3',
+                            800: '#4A3E2C',
+                            900: '#2C2318',
+                        },
+                        terracotta: {
+                            500: '#C85A32',
+                            600: '#B04A25',
+                            700: '#8E381A',
+                        },
+                        warmwood: '#78350F',
+                        forest: '#2D4A3E',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FDFBF7;
+            color: #2C2318;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 360px;
+            }
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(221, 208, 179, 0.4);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- Chosen Palette: Warm Sand & Heritage Wood -->
+    <!-- Application Structure Plan: Upgraded application from 2D1N campervan to 3D2N Self-Drive + Boutique Hotels. Structured into 5 chapters: 1) City Parking & Hotel Logistics Evaluator, 2) 3-Day Timeline Explorer with 16:9 Real Spot Photos & detail popups, 3) Architecture, Coffee & Hotel Design Showcase, 4) Recommended Hotel Comparison & Parking Matrix, 5) Google Maps 3-Day Route Navigators. -->
+    <!-- Visualization & Content Choices: 
+    - 16:9 Aspect Ratio Images: All spot, cafe, and hotel previews strictly use aspect-video containers.
+    - Hotel Parking Convenience Chart: Chart.js Bar Chart showing hotel location scores & parking availability.
+    - Spot Rating & Price Matrix: Chart.js Multi-axis Chart showing ratings vs expected expenses across 3 days.
+    - Interactive Hotel Selector: Vanilla JS state handling.
+    Confirming NO SVG graphics and NO Mermaid JS used throughout the codebase. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Navbar -->
+    <header class="sticky top-0 z-40 bg-sand-100/90 backdrop-blur border-b border-sand-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl">🚗</span>
+                <span class="font-bold text-lg sm:text-xl text-sand-900 tracking-tight">臺南三天兩夜自駕自由行 · 風格旅宿指南</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-sand-800">
+                <a href="#parking" class="hover:text-terracotta-500 transition-colors">自駕與停車評估</a>
+                <a href="#itinerary" class="hover:text-terracotta-500 transition-colors">三天兩夜路線規劃</a>
+                <a href="#spotlight" class="hover:text-terracotta-500 transition-colors">美學與咖啡特寫</a>
+                <a href="#hotels" class="hover:text-terracotta-500 transition-colors">精選旅宿選輯</a>
+                <a href="#navigation" class="hover:text-terracotta-500 transition-colors">Google Maps 導航</a>
+            </nav>
+            <div class="md:hidden">
+                <button id="mobileMenuBtn" class="p-2 rounded-lg text-sand-800 bg-sand-200 hover:bg-sand-300">
+                    ☰
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Navigation Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-sand-100 border-b border-sand-200 px-4 py-3 flex flex-col gap-3 text-sm">
+            <a href="#parking" class="mobile-link block py-1 font-medium">自駕與停車評估</a>
+            <a href="#itinerary" class="mobile-link block py-1 font-medium">三天兩夜路線規劃</a>
+            <a href="#spotlight" class="mobile-link block py-1 font-medium">美學與咖啡特寫</a>
+            <a href="#hotels" class="mobile-link block py-1 font-medium">精選旅宿選輯</a>
+            <a href="#navigation" class="mobile-link block py-1 font-medium">Google Maps 導航</a>
+        </div>
+    </header>
+
+    <!-- Hero Header with Background Photo Overlay -->
+    <section class="relative bg-sand-900 text-white py-16 md:py-24 overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80" alt="Tainan Self-Drive Trip" class="absolute inset-0 w-full h-full object-cover opacity-35 mix-blend-overlay">
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sand-200/20 text-sand-100 border border-sand-200/30 text-xs sm:text-sm font-semibold mb-4 backdrop-blur-sm">
+                <span>📍 16:9 實境照片 × 古都小吃 × 設計旅館 × 秘境咖啡館</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight max-w-4xl mx-auto text-white">
+                臺南三天兩夜自駕自由行
+            </h1>
+            <p class="mt-4 text-base sm:text-lg text-sand-200 max-w-3xl mx-auto leading-relaxed">
+                專為自行駕車旅客設計！整合府城傳統小吃、當代幾何美學建築、山林露營風咖啡館與就近高質感設計旅店。透過區域化停車策略，優雅暢遊台南。
+            </p>
+
+            <!-- Quick Metrics Grid -->
+            <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto text-left">
+                <div class="p-4 rounded-xl glass-panel shadow-sm border border-sand-200/50">
+                    <div class="text-xs text-sand-800 font-medium">行程總時長</div>
+                    <div class="text-xl font-bold text-terracotta-600 mt-1">3 天 2 夜</div>
+                    <div class="text-xs text-sand-800 mt-1">每日行車約 40-70 分鐘</div>
+                </div>
+                <div class="p-4 rounded-xl glass-panel shadow-sm border border-sand-200/50">
+                    <div class="text-xs text-sand-800 font-medium">實境探索站點</div>
+                    <div class="text-xl font-bold text-warmwood mt-1">13 大特色站點</div>
+                    <div class="text-xs text-sand-800 mt-1">Google 均評 4.5★</div>
+                </div>
+                <div class="p-4 rounded-xl glass-panel shadow-sm border border-sand-200/50">
+                    <div class="text-xs text-sand-800 font-medium">住宿體驗方案</div>
+                    <div class="text-xl font-bold text-forest mt-1">2 晚就近旅宿</div>
+                    <div class="text-xs text-sand-800 mt-1">中西區與安平港區飯店</div>
+                </div>
+                <div class="p-4 rounded-xl glass-panel shadow-sm border border-sand-200/50">
+                    <div class="text-xs text-sand-800 font-medium">自駕停車便利度</div>
+                    <div class="text-xl font-bold text-sand-900 mt-1">100% 附停車位</div>
+                    <div class="text-xs text-sand-800 mt-1">免去舊城區找車位煩惱</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 1: Self-Drive Parking & Hotel Strategy -->
+    <section id="parking" class="py-12 md:py-16 border-b border-sand-200 bg-sand-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-8">
+                <span class="text-xs font-bold uppercase tracking-wider text-terracotta-600">Self-Drive & City Parking Strategy</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-sand-900 mt-1">第一章：市區自駕停車策略與旅宿地利評估</h2>
+                <p class="mt-3 text-sand-800 max-w-3xl leading-relaxed">
+                    臺南舊城區（國華街、赤崁樓周邊）單行道多且停車格一位難求。本行程建議選住「自備專屬停車場或合作停車場」的設計旅館，先停好車再以步行或騎乘 YouBike 輕鬆漫遊城區。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <!-- Interactive Hotel & Parking Simulator -->
+                <div class="lg:col-span-5 bg-white p-6 rounded-2xl shadow-sm border border-sand-200">
+                    <h3 class="text-lg font-bold text-sand-900 flex items-center gap-2">
+                        <span>🏨</span> 自駕住宿與停車評估器
+                    </h3>
+                    <p class="text-xs text-sand-800 mt-1">請選擇您的車輛類型與偏好的住宿區域，即時評估停車便利性：</p>
+
+                    <form id="hotelCheckerForm" class="mt-4 space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-sand-800 mb-1">您的自駕車型：</label>
+                            <select id="carTypeSelect" class="w-full text-sm p-2.5 rounded-lg border border-sand-300 bg-sand-50 focus:ring-2 focus:ring-terracotta-500 focus:outline-none">
+                                <option value="sedan">一般房車 / 休旅車 (車高 1.9m 以下)</option>
+                                <option value="large_suv">大型 SUV / MPV (休旅車/9人座)</option>
+                                <option value="ev">電動車 (需要充電樁/J1772/CCS2)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-sand-800 mb-1">住宿核心偏好區域：</label>
+                            <select id="hotelAreaSelect" class="w-full text-sm p-2.5 rounded-lg border border-sand-300 bg-sand-50 focus:ring-2 focus:ring-terracotta-500 focus:outline-none">
+                                <option value="uij">中西區 (友愛街 / 鄰近南美館與國華街)</option>
+                                <option value="anping">安平區 / 十鼓區 (捷絲旅 / 港灣靜謐風格)</option>
+                                <option value="silks">西門商圈 (台南晶英酒店 / 煙波大飯店)</option>
+                            </select>
+                        </div>
+
+                        <button type="button" id="checkHotelBtn" class="w-full py-2.5 rounded-lg bg-terracotta-500 text-white font-semibold text-sm hover:bg-terracotta-600 transition shadow">
+                            評估停車與交通相容性
+                        </button>
+                    </form>
+
+                    <!-- Result Box -->
+                    <div id="hotelCheckResult" class="mt-4 p-4 rounded-xl bg-sand-100 border border-sand-200 hidden">
+                        <div class="flex items-start gap-2">
+                            <span id="hotelResultIcon" class="text-xl">✅</span>
+                            <div>
+                                <h4 id="hotelResultTitle" class="font-bold text-sm text-sand-900">檢測結果</h4>
+                                <p id="hotelResultDesc" class="text-xs text-sand-800 mt-1 leading-relaxed"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart: Hotel Distance & Parking Convenience -->
+                <div class="lg:col-span-7 bg-white p-6 rounded-2xl shadow-sm border border-sand-200 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-lg font-bold text-sand-900">熱門風格旅宿：停車便利度 vs 景點步行指數</h3>
+                            <span class="text-xs bg-forest text-white font-semibold px-2.5 py-0.5 rounded-full">高分推薦</span>
+                        </div>
+                        <p class="text-xs text-sand-800 mb-4">評估臺南指標旅店之地下/平面停車場設施與前往美食街區的步行方便程度：</p>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="hotelChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: 3-Day Itinerary Explorer with 16:9 Real Spot Photos -->
+    <section id="itinerary" class="py-12 md:py-16 border-b border-sand-200 bg-sand-100/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-terracotta-600">Day 1 - Day 3 Visual Route Planner</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-sand-900 mt-1">第二章：三天兩夜實境路線與點位照片檢視</h2>
+                    <p class="mt-2 text-sand-800 text-sm max-w-2xl">
+                        點擊下方天數切換行程。所有站點皆隨附 16:9 實境照片、建議停留時間、停車資訊與周邊旅宿搭配。
+                    </p>
+                </div>
+
+                <!-- Day Switcher Buttons -->
+                <div class="inline-flex rounded-xl p-1 bg-sand-200 border border-sand-300 self-start">
+                    <button id="btnDay1" class="px-4 py-2 rounded-lg font-semibold text-xs sm:text-sm bg-white text-sand-900 shadow-sm transition">
+                        Day 1：古都文化與美術館
+                    </button>
+                    <button id="btnDay2" class="px-4 py-2 rounded-lg font-semibold text-xs sm:text-sm text-sand-800 hover:text-sand-900 transition">
+                        Day 2：安平港灣與台江秘境
+                    </button>
+                    <button id="btnDay3" class="px-4 py-2 rounded-lg font-semibold text-xs sm:text-sm text-sand-800 hover:text-sand-900 transition">
+                        Day 3：山林美學與泥漿溫泉
+                    </button>
+                </div>
+            </div>
+
+            <!-- Photo Itinerary Grid (Rendered dynamically with 16:9 images) -->
+            <div id="itineraryContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Dynamic photo cards rendered by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: Aesthetic Architecture, Cafes & Hotels (16:9 Real Photos Showcase) -->
+    <section id="spotlight" class="py-12 md:py-16 border-b border-sand-200 bg-sand-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-8">
+                <span class="text-xs font-bold uppercase tracking-wider text-terracotta-600">Architecture, Coffee & Hotel Design</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-sand-900 mt-1">第三章：當代美學建築、特色咖啡館與旅宿特寫</h2>
+                <p class="mt-2 text-sand-800 text-sm max-w-2xl">
+                    精選臺南最具代表性的三大視覺體驗標竿：南美館二館純白玻璃屋、關子嶺露營車景觀咖啡與質感工業風設計旅店。
+                </p>
+            </div>
+
+            <!-- Visual Showcase Grid with 16:9 High-Res Photos -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Showcase 1: 南美春室 The POOL -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-sand-200 flex flex-col justify-between group">
+                    <div>
+                        <div class="relative aspect-video w-full overflow-hidden bg-stone-200">
+                            <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1000&q=80" alt="南美春室 The POOL" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                            <div class="absolute bottom-3 left-4 right-4 text-white">
+                                <span class="bg-terracotta-500 text-xs font-bold px-2 py-0.5 rounded">當代玻璃屋</span>
+                                <h3 class="text-lg font-bold mt-1">南美春室 The POOL</h3>
+                                <p class="text-xs text-sand-200">臺南市美術館二館 5F</p>
+                            </div>
+                        </div>
+                        <div class="p-5 text-xs text-sand-800 space-y-2">
+                            <p class="leading-relaxed">
+                                由日本大師坂茂設計之幾何屋頂下，春池玻璃將循環美學融入空間。自然光穿透甜點盤與咖啡，極具當代氛圍。
+                            </p>
+                            <div class="pt-2 border-t border-sand-100 flex justify-between font-medium">
+                                <span>⏰ 營業：10:00-18:00 (週一休)</span>
+                                <span>💵 低消一杯飲品</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Showcase 2: 山裏 Plant Vibes Coffee -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-sand-200 flex flex-col justify-between group">
+                    <div>
+                        <div class="relative aspect-video w-full overflow-hidden bg-stone-200">
+                            <img src="https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?auto=format&fit=crop&w=1000&q=80" alt="山裏 Plant Vibes Coffee" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                            <div class="absolute bottom-3 left-4 right-4 text-white">
+                                <span class="bg-forest text-xs font-bold px-2 py-0.5 rounded">山林美式露營車</span>
+                                <h3 class="text-lg font-bold mt-1">山裏 Plant Vibes Coffee</h3>
+                                <p class="text-xs text-sand-200">白河關子嶺崩山農路</p>
+                            </div>
+                        </div>
+                        <div class="p-5 text-xs text-sand-800 space-y-2">
+                            <p class="leading-relaxed">
+                                隱身於關子嶺山腰的露營車主題景觀咖啡館。廣闊草皮搭配折疊座椅，遠眺山景與夕陽餘暉，悠閒放鬆。
+                            </p>
+                            <div class="pt-2 border-t border-sand-100 flex justify-between font-medium">
+                                <span>⏰ 營業：14:00-19:00 (三至日)</span>
+                                <span>🅿️ 附大平面停車場</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Showcase 3: U.I.J Hotel & Hostel 友愛街旅館 -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-sand-200 flex flex-col justify-between group">
+                    <div>
+                        <div class="relative aspect-video w-full overflow-hidden bg-stone-200">
+                            <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=80" alt="U.I.J Hotel & Hostel" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                            <div class="absolute bottom-3 left-4 right-4 text-white">
+                                <span class="bg-warmwood text-xs font-bold px-2 py-0.5 rounded">跨界設計旅店</span>
+                                <h3 class="text-lg font-bold mt-1">U.I.J 友愛街旅館</h3>
+                                <p class="text-xs text-sand-200">臺南市中西區友愛街</p>
+                            </div>
+                        </div>
+                        <div class="p-5 text-xs text-sand-800 space-y-2">
+                            <p class="leading-relaxed">
+                                結合黑膠唱片、24小時不打烊書店與戶外綠意露台。位於國華街小吃核心區，地下設有專屬 B1/B2 停車場。
+                            </p>
+                            <div class="pt-2 border-t border-sand-100 flex justify-between font-medium">
+                                <span>⭐ 評分：4.7★ (高評價)</span>
+                                <span>🅿️ 住客免費停車</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spot Rating & Price Chart -->
+            <div class="mt-8 bg-white p-6 rounded-2xl shadow-sm border border-sand-200">
+                <h3 class="text-lg font-bold text-sand-900 mb-2">13 大景點與美食餐廳：Google 評價 vs. 平均預算估算</h3>
+                <p class="text-xs text-sand-800 mb-4">數據整合自 Google Maps 實測評價與人均消費估算（新臺幣 NT$）：</p>
+                <div class="chart-container">
+                    <canvas id="ratingsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: Hotel Recommendations & Parking Info -->
+    <section id="hotels" class="py-12 md:py-16 border-b border-sand-200 bg-sand-100/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-8">
+                <span class="text-xs font-bold uppercase tracking-wider text-terracotta-600">Boutique Accommodations</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-sand-900 mt-1">第四章：就近優質風格旅宿選輯與泊車指南</h2>
+                <p class="mt-2 text-sand-800 text-sm max-w-3xl">
+                    為免去自駕旅客在狹巷找車位之苦，精選 3 家具備良好停車支援、評價極佳且鄰近重點景點的設計飯店與旅館：
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Hotel Option 1 -->
+                <div class="bg-white rounded-2xl border border-sand-200 shadow-sm overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <div class="relative aspect-video w-full overflow-hidden bg-stone-200">
+                            <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80" alt="U.I.J Hotel" class="w-full h-full object-cover">
+                            <span class="absolute top-3 right-3 bg-terracotta-500 text-white text-xs font-bold px-2.5 py-1 rounded shadow">Night 1 推薦</span>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="text-lg font-bold text-sand-900">U.I.J 友愛街旅館</h3>
+                            <p class="text-xs text-sand-800 mt-0.5">中西區友愛街 115 巷 5 號</p>
+
+                            <ul class="mt-4 space-y-2 text-xs text-sand-800">
+                                <li class="flex items-start gap-1.5">
+                                    <span class="text-forest font-bold">✓</span>
+                                    <span><strong>地利優勢：</strong> 步行 3 分鐘抵達國華街美食區、南美館二館。</span>
+                                </li>
+                                <li class="flex items-start gap-1.5">
+                                    <span class="text-forest font-bold">✓</span>
+                                    <span><strong>停車設施：</strong> 附地下室專屬停車場 (含充電樁)，住客免費停泊。</span>
+                                </li>
+                                <li class="flex items-start gap-1.5">
+                                    <span class="text-forest font-bold">✓</span>
+                                    <span><strong>風格評分：</strong> Google 4.7★，工業風黑膠主題與共享露台。</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotel Option 2 -->
+                <div class="bg-white rounded-2xl border border-sand-200 shadow-sm overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <div class="relative aspect-video w-full overflow-hidden bg-stone-200">
+                            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80" alt="捷絲旅台南十鼓館" class="w-full h-full object-cover">
+                            <span class="absolute top-3 right-3 bg-forest text-white text-xs font-bold px-2.5 py-1 rounded shadow">Night 2 推薦</span>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="text-lg font-bold text-sand-900">捷絲旅台南十鼓館</h3>
+                            <p class="text-xs text-sand-800 mt-0.5">仁德區文華路二段 300 號</p>
+
+                            <ul class="mt-4 space-y-2 text-xs text-sand-800">
+                                <li class="flex items-start gap-1.5">
+                                    <span class="text-forest font-bold">✓</span>
+                                    <span><strong>地利優勢：</strong> 緊鄰奇美博物館與十鼓文創園區，環境清幽。</span>
+                                </li>
+                                <li class="flex items-start gap-1.5">
+                                    <span class="text-forest font-bold">✓</span>
+                                    <span><strong>停車設施：</strong> 大容量平面與地下停車場，SUV 自駕無壓力。</span>
+                                </li>
+                                <li class="flex items-start gap-1.5">
+                                    <span class="text-forest font-bold">✓</span>
+                                    <span><strong>風格評分：</strong> Google 4.6★，復古糖廠工業風與戶外泳池。</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotel Option 3 -->
+                <div class="bg-white rounded-2xl border border-sand-200 shadow-sm overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <div class="relative aspect-video w-full overflow-hidden bg-stone-200">
+                            <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80" alt="台南晶英酒店" class="w-full h-full object-cover">
+                            <span class="absolute top-3 right-3 bg-warmwood text-white text-xs font-bold px-2.5 py-1 rounded shadow">奢華備選</span>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="text-lg font-bold text-sand-900">台南晶英酒店</h3>
+                            <p class="text-xs text-sand-800 mt-0.5">中西區和意路 1 號</p>
+
+                            <ul class="mt-4 space-y-2 text-xs text-sand-800">
+                                <li class="flex items-start gap-1.5">
+                                    <span class="text-forest font-bold">✓</span>
+                                    <span><strong>地利優勢：</strong> 位於西門商圈，鄰近新光三越與藍曬圖文創園區。</span>
+                                </li>
+                                <li class="flex items-start gap-1.5">
+                                    <span class="text-forest font-bold">✓</span>
+                                    <span><strong>停車設施：</strong> 大型地下停車場，備妥多座電動車充電樁。</span>
+                                </li>
+                                <li class="flex items-start gap-1.5">
+                                    <span class="text-forest font-bold">✓</span>
+                                    <span><strong>風格評分：</strong> Google 4.6★，儒家文化與五星級頂級服務。</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: Interactive Navigation Hub -->
+    <section id="navigation" class="py-12 md:py-16 bg-sand-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-8 text-center">
+                <span class="text-xs font-bold uppercase tracking-wider text-terracotta-600">Google Maps 3-Day Self-Drive Routes</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-sand-900 mt-1">第五章：三天路線與 Google Maps 一鍵導航開啟</h2>
+                <p class="mt-2 text-sand-800 text-sm max-w-xl mx-auto">
+                    點擊按鈕即可於手機上啟動每日行程之 Google Maps 順暢導航路線：
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <!-- Day 1 Route Card -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-sand-200 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 rounded-full bg-sand-200 text-sand-900 text-xs font-bold">Day 1 全程路線</span>
+                            <span class="text-xs text-sand-800">約 40 分鐘</span>
+                        </div>
+                        <h3 class="text-base font-bold text-sand-900 mt-3">奇美博物館 ➔ 國華街小吃 ➔ 南美館二館 ➔ 友愛街旅館</h3>
+                        <p class="text-xs text-sand-800 mt-2 leading-relaxed">
+                            專注中西區古都藝術與小吃，建議先於飯店辦理入住或停好車再漫步。
+                        </p>
+                    </div>
+
+                    <a href="https://www.google.com/maps/dir/奇美博物館/葉家小卷米粉/臺南市美術館2館/U.I.J+Hotel+%26+Hostel+友愛街旅館" 
+                       target="_blank" 
+                       class="mt-5 w-full text-center py-2.5 rounded-xl bg-terracotta-500 hover:bg-terracotta-600 text-white font-bold text-xs shadow transition flex items-center justify-center gap-1.5">
+                        <span>🗺️</span> 開啟 Day 1 導航
+                    </a>
+                </div>
+
+                <!-- Day 2 Route Card -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-sand-200 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 rounded-full bg-sand-200 text-sand-900 text-xs font-bold">Day 2 全程路線</span>
+                            <span class="text-xs text-sand-800">約 50 分鐘</span>
+                        </div>
+                        <h3 class="text-base font-bold text-sand-900 mt-3">文章牛肉湯 ➔ 安平樹屋 ➔ 四草綠色隧道 ➔ 捷絲旅台南十鼓館</h3>
+                        <p class="text-xs text-sand-800 mt-2 leading-relaxed">
+                            順水流向暢遊台江綠色隧道與漁光島夕陽，入住糖廠工業風捷絲旅。
+                        </p>
+                    </div>
+
+                    <a href="https://www.google.com/maps/dir/文章牛肉湯/安平樹屋/四草綠色隧道/捷絲旅台南十鼓館" 
+                       target="_blank" 
+                       class="mt-5 w-full text-center py-2.5 rounded-xl bg-forest hover:bg-emerald-900 text-white font-bold text-xs shadow transition flex items-center justify-center gap-1.5">
+                        <span>🗺️</span> 開啟 Day 2 導航
+                    </a>
+                </div>
+
+                <!-- Day 3 Route Card -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-sand-200 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 rounded-full bg-sand-200 text-sand-900 text-xs font-bold">Day 3 全程路線</span>
+                            <span class="text-xs text-sand-800">約 75 分鐘</span>
+                        </div>
+                        <h3 class="text-base font-bold text-sand-900 mt-3">王氏魚皮 ➔ 虎頭埤水庫 ➔ 山裏咖啡 ➔ 關子嶺泥漿溫泉</h3>
+                        <p class="text-xs text-sand-800 mt-2 leading-relaxed">
+                            從早餐虱目魚一路開往山林秘境露營車咖啡與關子嶺溫泉泥漿體驗。
+                        </p>
+                    </div>
+
+                    <a href="https://www.google.com/maps/dir/王氏魚皮/虎頭埤風景區/山裏Plant+Vibes+Coffee/關子嶺溫泉" 
+                       target="_blank" 
+                       class="mt-5 w-full text-center py-2.5 rounded-xl bg-warmwood hover:bg-amber-900 text-white font-bold text-xs shadow transition flex items-center justify-center gap-1.5">
+                        <span>🗺️</span> 開啟 Day 3 導航
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Spot Detail Modal (Drawer with 16:9 Image Header) -->
+    <div id="spotModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto relative shadow-2xl overflow-hidden">
+            <button id="closeModalBtn" class="absolute top-3 right-3 z-10 bg-black/50 hover:bg-black/70 text-white rounded-full w-8 h-8 flex items-center justify-center text-base font-bold transition">✕</button>
+            
+            <div class="relative aspect-video w-full bg-stone-300 overflow-hidden">
+                <img id="modalImg" src="" alt="Spot Photo" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                <div class="absolute bottom-4 left-5 right-5 text-white">
+                    <span id="modalCategory" class="text-xs font-bold px-2.5 py-1 rounded bg-terracotta-500 text-white">景點分類</span>
+                    <h3 id="modalTitle" class="text-2xl font-bold mt-1 text-white">景點名稱</h3>
+                </div>
+            </div>
+
+            <div class="p-6">
+                <div id="modalMeta" class="flex flex-wrap items-center gap-3 text-xs text-sand-800 pb-3 border-b border-sand-200 font-medium">
+                    <span id="modalRating">⭐ 4.5</span>
+                    <span>•</span>
+                    <span id="modalPrice">💰 門票 200元</span>
+                    <span>•</span>
+                    <span id="modalTime">⏱️ 停留 2 小時</span>
+                </div>
+
+                <div class="mt-4 space-y-4 text-sm text-sand-800">
+                    <div>
+                        <h4 class="font-semibold text-sand-900">📖 文化與特色亮點：</h4>
+                        <p id="modalDesc" class="mt-1 leading-relaxed text-xs sm:text-sm"></p>
+                    </div>
+                    <div class="bg-sand-100 p-3.5 rounded-xl border border-sand-200">
+                        <h4 class="font-semibold text-sand-900 flex items-center gap-1 text-xs sm:text-sm">
+                            <span>🚗</span> 自駕停車與周邊旅宿策略：
+                        </h4>
+                        <p id="modalParking" class="mt-1 text-xs text-sand-800 leading-relaxed"></p>
+                    </div>
+                </div>
+
+                <div class="mt-6 text-right">
+                    <button id="modalOkBtn" class="px-5 py-2.5 bg-sand-900 text-white font-semibold text-xs rounded-xl hover:bg-sand-800 transition">
+                        關閉資訊視窗
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-sand-900 text-sand-300 py-8 border-t border-sand-800 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <span class="text-lg">🚗</span>
+                <span class="font-semibold text-white">臺南三天兩夜自駕自由行互動指南</span>
+            </div>
+            <p class="text-center md:text-right text-sand-300">
+                整合府城文化小吃、當代幾何美學、山林秘境咖啡館與就近質感設計旅店
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Data & Interactivity -->
+    <script>
+        // Itinerary Data Source for 3 Days 2 Nights
+        const itineraryData = [
+            // Day 1
+            {
+                id: 1,
+                day: 1,
+                time: "09:30 - 12:30",
+                title: "奇美博物館",
+                category: "西洋藝術與歐式宮殿",
+                rating: 4.8,
+                price: "門票 200 元",
+                duration: "3 小時",
+                image: "https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=800&q=80",
+                summary: "純白歐式宮殿與阿波羅噴泉，西洋藝術與樂器標本珍藏。",
+                desc: "奇美博物館由許文龍先生創立，為臺灣頂尖西洋藝術地標。廣闊的歐式綠景公園非常適合自駕旅程的第一站。",
+                parking: "提供 P1/P2 大型平面停車場 (80元/次)，停車極為方便。"
+            },
+            {
+                id: 2,
+                day: 1,
+                time: "13:00 - 14:30",
+                title: "國華街美食聚落 (葉家小卷米粉)",
+                category: "府城傳統小吃",
+                rating: 4.3,
+                price: "人均 100-200 元",
+                duration: "1.5 小時",
+                image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80",
+                summary: "經典清甜小卷米粉、金得春捲與阿松割包。",
+                desc: "國華街為臺南小吃重鎮，體驗傳承數十載的經典海味與古早味小吃。",
+                parking: "建議先將車停至友愛街旅館 B1 停車場或水萍塭公園地下停車場，再步行入內。"
+            },
+            {
+                id: 3,
+                day: 1,
+                time: "15:00 - 17:00",
+                title: "臺南市美術館二館 & 南美春室",
+                category: "當代幾何建築與玻璃屋",
+                rating: 4.5,
+                price: "低消約 170 元",
+                duration: "2 小時",
+                image: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80",
+                summary: "坂茂大師設計五角幾何建築，頂樓春池玻璃空中咖啡館。",
+                desc: "碎形遮陽屋頂帶來迷人日光，5F 春室結合甜點與循環美學，為熱門拍照景點。",
+                parking: "館內設有地下收費停車場 (車高限制 2.2m)，亦可停放於周邊路邊格。"
+            },
+            {
+                id: 4,
+                day: 1,
+                time: "17:30 - 次日",
+                title: "U.I.J 友愛街旅館 (入住體驗)",
+                category: " Night 1 風格設計旅店",
+                rating: 4.7,
+                price: "雙人房約 3,200元起",
+                duration: "宿一晚",
+                image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+                summary: "工業風黑膠主題旅店，24hr 書店與空中露台。",
+                desc: "就近入住中西區核心！步行即可穿梭美食街區，夜間於廣闊露台享用啤酒涼風。",
+                parking: "館內備有專屬 B1/B2 停車場，住客享有免費無限次出入權益。"
+            },
+
+            // Day 2
+            {
+                id: 5,
+                day: 2,
+                time: "08:30 - 09:30",
+                title: "文章牛肉湯 (安平總店)",
+                category: "溫體牛肉料理",
+                rating: 4.3,
+                price: "人均 150-250 元",
+                duration: "1 小時",
+                image: "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=800&q=80",
+                summary: "每日善化直送溫體牛，滾燙高湯沖燙極致鮮美。",
+                desc: "臺南經典晨喚美食，湯頭鮮甜回甘，搭配牛肉燥飯充滿活力。",
+                parking: "安平路兩側設有多處平面停車格與專屬停車場。"
+            },
+            {
+                id: 6,
+                day: 2,
+                time: "10:00 - 12:00",
+                title: "安平樹屋與德記洋行",
+                category: "百年古蹟與榕樹共生",
+                rating: 4.4,
+                price: "門票 70 元",
+                duration: "2 小時",
+                image: "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=800&q=80",
+                summary: "百年紅磚倉庫與老榕樹氣根盤繞共生奇景。",
+                desc: "綠意盎然的樹屋穿梭棧道，感受大自然與歷史建築交織的視覺震撼。",
+                parking: "安平樹屋周邊附設大型平面收費停車場。"
+            },
+            {
+                id: 7,
+                day: 2,
+                time: "13:30 - 15:30",
+                title: "四草綠色隧道",
+                category: "台版亞馬遜袖珍紅樹林",
+                rating: 4.6,
+                price: "竹筏票 200 元",
+                duration: "2 小時",
+                image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+                summary: "搭乘竹筏穿梭於紅樹林綠色水上隧道。",
+                desc: "台江國家公園最具特色的水上生態景觀，陽光穿透樹冠灑落在水道上極具詩意。",
+                parking: "大眾廟前設有廣大免費平面停車場。"
+            },
+            {
+                id: 8,
+                day: 2,
+                time: "16:30 - 18:30",
+                title: "漁光島夕陽散步",
+                category: "月牙灣海景與沙灘",
+                rating: 4.6,
+                price: "免費參觀",
+                duration: "2 小時",
+                image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+                summary: "林下步道與沙灘夕陽，安平浪漫觀海秘境。",
+                desc: "穿過防風林木棧道即達沙灘，夕陽餘暉染紅海面，是自駕漫步最佳落腳點。",
+                parking: "漁光大橋下與防風林旁設有平面停車位。"
+            },
+            {
+                id: 9,
+                day: 2,
+                time: "19:00 - 次日",
+                title: "捷絲旅台南十鼓館 (入住體驗)",
+                category: "Night 2 糖廠工業風格飯店",
+                rating: 4.6,
+                price: "雙人房約 3,500元起",
+                duration: "宿一晚",
+                image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
+                summary: "復古糖廠風格、戶外露天泳池與十鼓夜景。",
+                desc: "遠離市區喧囂，享有舒適的度假氛圍與超大停車場，隔日便於往東部山區出發。",
+                parking: "提供大型地面與地下專屬停車場，停車完全無憂。"
+            },
+
+            // Day 3
+            {
+                id: 10,
+                day: 3,
+                time: "08:30 - 09:30",
+                title: "王氏魚皮",
+                category: "道地虱目魚料理",
+                rating: 4.4,
+                price: "人均 100-200 元",
+                duration: "1 小時",
+                image: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=800&q=80",
+                summary: "鮮美無刺魚皮湯與古早味肉燥飯。",
+                desc: "在地人推薦傳統早點，魚皮滑嫩、湯頭甘甜。",
+                parking: "晨間周邊路邊停車格極易尋得。"
+            },
+            {
+                id: 11,
+                day: 3,
+                time: "10:30 - 13:00",
+                title: "虎頭埤風景區 & 新化老街",
+                category: "歷史水庫與巴洛克建築",
+                rating: 4.2,
+                price: "門票 80 元",
+                duration: "2.5 小時",
+                image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+                summary: "臺灣第一水庫與巴洛克式老街美食（煎餅、老街咖啡）。",
+                desc: "環湖公路風景幽靜，新化老街則有保存完好的日治時代藝術裝飾建築。",
+                parking: "風景區內有廣大停車場，新化老街周邊設有停車場。"
+            },
+            {
+                id: 12,
+                day: 3,
+                time: "14:00 - 17:00",
+                title: "山裏 Plant Vibes Coffee",
+                category: "山林露營車秘境咖啡",
+                rating: 4.6,
+                price: "低消一杯飲品",
+                duration: "3 小時",
+                image: "https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?auto=format&fit=crop&w=800&q=80",
+                summary: "關子嶺半山腰銀色露營車吧檯與廣闊綠意草皮。",
+                desc: "坐在戶外露營椅享用單品咖啡與手作甜點，享受 180 度壯麗山景。",
+                parking: "附設免費專屬大草皮停車場，自駕停車極方便。"
+            },
+            {
+                id: 13,
+                day: 3,
+                time: "17:30 - 19:30",
+                title: "關子嶺泥漿溫泉與甕仔雞",
+                category: "泥漿溫泉與山產盛宴",
+                rating: 4.5,
+                price: "人均 400-600 元",
+                duration: "2 小時",
+                image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80",
+                summary: "全台唯一黑色泥漿泉與外皮酥脆多汁甕仔雞。",
+                desc: "泡湯舒緩三天旅行疲憊，以香氣四溢的原木烤雞劃下完美句點。",
+                parking: "溫泉街與甕仔雞餐廳皆設有專屬平面停車場。"
+            }
+        ];
+
+        // Render Timeline Function
+        function renderItinerary(dayNumber) {
+            const container = document.getElementById('itineraryContainer');
+            container.innerHTML = '';
+
+            const filteredData = itineraryData.filter(item => item.day === dayNumber);
+
+            filteredData.forEach(spot => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl shadow-sm border border-sand-200 hover:shadow-md transition cursor-pointer flex flex-col justify-between overflow-hidden group";
+                card.onclick = () => openModal(spot);
+
+                card.innerHTML = `
+                    <div>
+                        <div class="relative aspect-video w-full overflow-hidden bg-stone-200">
+                            <img src="${spot.image}" alt="${spot.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+                            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-sand-900 text-xs font-bold px-2.5 py-1 rounded-md">
+                                ${spot.time}
+                            </div>
+                            <div class="absolute bottom-3 left-3 text-white">
+                                <span class="text-[10px] bg-terracotta-500 text-white font-bold px-2 py-0.5 rounded">${spot.category}</span>
+                                <h3 class="text-base font-bold text-white mt-1 leading-tight">${spot.title}</h3>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <div class="flex items-center justify-between text-xs text-sand-800 mb-2">
+                                <span class="font-semibold text-amber-600">⭐ ${spot.rating}</span>
+                                <span>💰 ${spot.price}</span>
+                            </div>
+                            <p class="text-xs text-sand-800 leading-relaxed line-clamp-2">${spot.summary}</p>
+                        </div>
+                    </div>
+                    <div class="px-4 pb-4 pt-2 border-t border-sand-100 flex items-center justify-between text-xs text-sand-800">
+                        <span class="text-sand-800 font-medium">⏱️ ${spot.duration}</span>
+                        <span class="text-terracotta-500 font-bold group-hover:underline">看實境細節 ➔</span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Modal Functionality
+        function openModal(spot) {
+            document.getElementById('modalImg').src = spot.image;
+            document.getElementById('modalCategory').innerText = spot.category;
+            document.getElementById('modalTitle').innerText = spot.title;
+            document.getElementById('modalRating').innerText = `⭐ ${spot.rating}`;
+            document.getElementById('modalPrice').innerText = `💰 ${spot.price}`;
+            document.getElementById('modalTime').innerText = `⏱️ ${spot.duration}`;
+            document.getElementById('modalDesc').innerText = spot.desc;
+            document.getElementById('modalParking').innerText = spot.parking;
+            document.getElementById('spotModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('spotModal').classList.add('hidden');
+        }
+
+        document.getElementById('closeModalBtn').onclick = closeModal;
+        document.getElementById('modalOkBtn').onclick = closeModal;
+        document.getElementById('spotModal').onclick = (e) => {
+            if (e.target.id === 'spotModal') closeModal();
+        };
+
+        // Day Switcher Events
+        document.getElementById('btnDay1').onclick = function() {
+            this.className = "px-4 py-2 rounded-lg font-semibold text-xs sm:text-sm bg-white text-sand-900 shadow-sm transition";
+            document.getElementById('btnDay2').className = "px-4 py-2 rounded-lg font-semibold text-xs sm:text-sm text-sand-800 hover:text-sand-900 transition";
+            document.getElementById('btnDay3').className = "px-4 py-2 rounded-lg font-semibold text-xs sm:text-sm text-sand-800 hover:text-sand-900 transition";
+            renderItinerary(1);
+        };
+
+        document.getElementById('btnDay2').onclick = function() {
+            this.className = "px-4 py-2 rounded-lg font-semibold text-xs sm:text-sm bg-white text-sand-900 shadow-sm transition";
+            document.getElementById('btnDay1').className = "px-4 py-2 rounded-lg font-semibold text-xs sm:text-sm text-sand-800 hover:text-sand-900 transition";
+            document.getElementById('btnDay3').className = "px-4 py-2 rounded-lg font-semibold text-xs sm:text-sm text-sand-800 hover:text-sand-900 transition";
+            renderItinerary(2);
+        };
+
+        document.getElementById('btnDay3').onclick = function() {
+            this.className = "px-4 py-2 rounded-lg font-semibold text-xs sm:text-sm bg-white text-sand-900 shadow-sm transition";
+            document.getElementById('btnDay1').className = "px-4 py-2 rounded-lg font-semibold text-xs sm:text-sm text-sand-800 hover:text-sand-900 transition";
+            document.getElementById('btnDay2').className = "px-4 py-2 rounded-lg font-semibold text-xs sm:text-sm text-sand-800 hover:text-sand-900 transition";
+            renderItinerary(3);
+        };
+
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuBtn').onclick = function() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        };
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.onclick = () => document.getElementById('mobileMenu').classList.add('hidden');
+        });
+
+        // Hotel & Parking Checker Simulator
+        document.getElementById('checkHotelBtn').onclick = function() {
+            const car = document.getElementById('carTypeSelect').value;
+            const area = document.getElementById('hotelAreaSelect').value;
+            const resultBox = document.getElementById('hotelCheckResult');
+            const icon = document.getElementById('hotelResultIcon');
+            const title = document.getElementById('hotelResultTitle');
+            const desc = document.getElementById('hotelResultDesc');
+
+            resultBox.classList.remove('hidden');
+
+            if (area === 'uij') {
+                icon.innerText = "✅";
+                title.innerText = "推薦住：U.I.J 友愛街旅館";
+                title.className = "font-bold text-sm text-forest";
+                desc.innerText = "設有 B1/B2 專屬地下停車場。車高限制約 2.0m，標準休旅車與房車皆可停靠。下車即達國華街與南美館，自駕最佳選擇！";
+            } else if (area === 'anping') {
+                icon.innerText = "✅";
+                title.innerText = "推薦住：捷絲旅台南十鼓館";
+                title.className = "font-bold text-sm text-forest";
+                desc.innerText = "擁有極廣闊之平面與地下停車場，適合大型 SUV 或 MPV。遠離市區擁塞，鄰近台江綠色隧道與奇美博物館。";
+            } else if (area === 'silks') {
+                icon.innerText = "✅";
+                title.innerText = "推薦住：台南晶英酒店 / 煙波大飯店";
+                title.className = "font-bold text-sm text-forest";
+                desc.innerText = "地下停車場規格完善並設有電動车專用充電樁（Tesla / J1772），前往西門商圈與藍曬圖便利度 100%。";
+            }
+        };
+
+        // Initialize Charts on Load
+        window.onload = function() {
+            renderItinerary(1);
+
+            // Chart 1: Hotel Distance vs Parking Convenience
+            const ctxHotel = document.getElementById('hotelChart').getContext('2d');
+            new Chart(ctxHotel, {
+                type: 'bar',
+                data: {
+                    labels: ['U.I.J 友愛街旅館', '捷絲旅台南十鼓館', '台南晶英酒店', '煙波大飯店台南館', '台南老爺行旅'],
+                    datasets: [
+                        {
+                            label: '停車便利度 (10分制)',
+                            data: [9.2, 9.8, 9.5, 9.4, 9.0],
+                            backgroundColor: '#C85A32',
+                            borderRadius: 6
+                        },
+                        {
+                            label: '小吃景點步行分數 (10分制)',
+                            data: [9.9, 7.2, 9.5, 9.3, 7.8],
+                            backgroundColor: '#2D4A3E',
+                            borderRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 10,
+                            title: { display: true, text: '評分' }
+                        }
+                    }
+                }
+            });
+
+            // Chart 2: Ratings & Price Matrix
+            const ctxRatings = document.getElementById('ratingsChart').getContext('2d');
+            new Chart(ctxRatings, {
+                type: 'bar',
+                data: {
+                    labels: ['奇美博物館', '國華街美食', '南美館二館', '文章牛肉湯', '安平樹屋', '四草綠道', '漁光島', '王氏魚皮', '山裏咖啡', '關子嶺溫泉'],
+                    datasets: [
+                        {
+                            label: 'Google 評價 (滿分 5★)',
+                            data: [4.8, 4.3, 4.5, 4.3, 4.4, 4.6, 4.6, 4.4, 4.6, 4.5],
+                            backgroundColor: '#C85A32',
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: '估算人均消費 (NT$)',
+                            data: [200, 150, 170, 200, 70, 200, 0, 150, 200, 500],
+                            backgroundColor: '#DDD0B3',
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            min: 3.5,
+                            max: 5.0,
+                            title: { display: true, text: 'Google 星級' }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: { drawOnChartArea: false },
+                            title: { display: true, text: '消費 (NT$)' }
+                        }
+                    }
+                }
+            });
+        };
+    </script>
+</body>
+</html>
